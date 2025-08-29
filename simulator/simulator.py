@@ -5,7 +5,7 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Initialize Firebase using the uploaded secret file
-cred = credentials.Certificate("/etc/secrets/cold-storage-iot-firebase-adminsdk-8cf30a9517.json")
+cred = credentials.Certificate("/etc/secrets/cold-storage-firebase.json")
 firebase_admin.initialize_app(cred, {
     "databaseURL": "https://cold-storage-iot-default-rtdb.firebaseio.com"
 })
