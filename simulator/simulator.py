@@ -3,6 +3,8 @@ import time
 from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials, db
+from flask import Flask
+import threading
 
 # Initialize Firebase using the uploaded secret file
 cred = credentials.Certificate("/etc/secrets/cold-storage-firebase.json")
@@ -43,3 +45,17 @@ while True:
         print(f"Failed to push data at {now}: {e}")
 
     time.sleep(5)
+
+# --- Start simulator in a separate thread ---
+threading.Thread(target=push_data_loop, daemon=True).start()
+
+# --- Flask web server ---
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Simulator running!"
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
