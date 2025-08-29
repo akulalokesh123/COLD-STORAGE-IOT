@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warehouse Cold Storage Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Warehouse Cold Storage Monitoring</h1>
+  </header>
+
+  <!-- KPI Section -->
+  <section id="kpis">
+    <div class="kpi-card">
+      <h3>Total Zones in Alert</h3>
+      <p id="alertCount">0</p>
+    </div>
+    <div class="kpi-card">
+      <h3>Average Temperature</h3>
+      <p id="avgTemp">-- °C</p>
+    </div>
+    <div class="kpi-card">
+      <h3>Average Humidity</h3>
+      <p id="avgHum">-- %</p>
+    </div>
+    <div class="kpi-card">
+      <h3>Total Alerts</h3>
+      <p id="totalAlertFrequency">0</p>
+    </div>
+  </section>
+
+  <!-- Zones Cards -->
+  <section id="zones-container">
+    <div class="zone-card" id="zone1">
+      <h2>Zone 1</h2>
+      <p class="temperature">--</p>
+      <p class="humidity">--</p>
+      <p class="timestamp">--</p>
+      <p class="alert">Status: --</p>
+    </div>
+    <div class="zone-card" id="zone2">
+      <h2>Zone 2</h2>
+      <p class="temperature">--</p>
+      <p class="humidity">--</p>
+      <p class="timestamp">--</p>
+      <p class="alert">Status: --</p>
+    </div>
+    <div class="zone-card" id="zone3">
+      <h2>Zone 3</h2>
+      <p class="temperature">--</p>
+      <p class="humidity">--</p>
+      <p class="timestamp">--</p>
+      <p class="alert">Status: --</p>
+    </div>
+    <div class="zone-card" id="zone4">
+      <h2>Zone 4</h2>
+      <p class="temperature">--</p>
+      <p class="humidity">--</p>
+      <p class="timestamp">--</p>
+      <p class="alert">Status: --</p>
+    </div>
+  </section>
+
+  <!-- Charts Section -->
+  <section id="charts">
+    <div class="chart-card">
+      <h2>Temperature Trend</h2>
+      <canvas id="tempChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h2>Humidity Trend</h2>
+      <canvas id="humChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Logs Section -->
+  <section id="logs">
+    <h2>Recent Logs</h2>
+    <table id="logTable">
+      <thead>
+        <tr>
+          <th>Zone</th>
+          <th>Temperature</th>
+          <th>Humidity</th>
+          <th>Status</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- Script -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+/* ----------------------
+   General Styles
+---------------------- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fa;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+header h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+/* ----------------------
+   KPI Section
+---------------------- */
+#kpis {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.kpi-card {
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 20px;
+  width: 190px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+}
+
+.kpi-card h3 {
+  font-size: 1rem;
+  color: #555;
+}
+
+.kpi-card p {
+  font-size: 1.6rem;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #1a73e8;
+}
+
+/* ----------------------
+   Zone Cards
+---------------------- */
+#zones-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.zone-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  width: 230px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.zone-card:hover {
+  transform: translateY(-5px);
+}
+
+.zone-card h2 {
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.temperature, .humidity, .timestamp, .alert {
+  margin: 6px 0;
+}
+
+.alert {
+  font-weight: bold;
+  color: green;
+}
+
+.alert.out-of-range {
+  color: red;
+}
+
+/* ----------------------
+   Charts Section
+---------------------- */
+#charts {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 20px;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.chart-card h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+#charts canvas {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 280px;
+}
+
+/* ----------------------
+   Logs Section
+---------------------- */
+#logs {
+  margin-top: 30px;
+}
+
+#logs h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+#logs table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+#logs th, #logs td {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  text-align: center;
+}
+
+#logs th {
+  background-color: #f1f5f9;
+  font-weight: bold;
+}
+
+/* ----------------------
+   Responsive Adjustments
+---------------------- */
+@media (max-width: 800px) {
+  #kpis {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #charts canvas {
+    height: 220px;
+  }
+}

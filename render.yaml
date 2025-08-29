@@ -1,0 +1,8 @@
+services:
+  - type: worker
+    name: cold-storage-simulator
+    env: python
+    rootDir: simulator
+    buildCommand: pip install -r requirements.txt
+    startCommand: python simulator.py
+    plan: free

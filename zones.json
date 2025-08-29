@@ -1,0 +1,20 @@
+{
+  "zones": {
+    "zone1": {
+      "temperature": 8.5,
+      "humidity": 72.1
+    },
+    "zone2": {
+      "temperature": 10.2,
+      "humidity": 85.3
+    },
+    "zone3": {
+      "temperature": 6.8,
+      "humidity": 65.4
+    },
+    "zone4": {
+      "temperature": 9.7,
+      "humidity": 78.9
+    }
+  }
+}
