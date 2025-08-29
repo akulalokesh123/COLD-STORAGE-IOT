@@ -20,10 +20,7 @@ firebase_cred = credentials.Certificate({
     "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_X509_CERT_URL"),
     "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_X509_CERT_URL")
 })
-
-firebase_admin.initialize_app(firebase_cred, {
-    "databaseURL": os.getenv("FIREBASE_DB_URL")
-})
+firebase_admin.initialize_app(firebase_cred, {"databaseURL": os.getenv("FIREBASE_DB_URL")})
 
 zones_ref = db.reference("zones")
 
@@ -51,6 +48,7 @@ def push_data_loop():
             zone_values[zone]["humidity"] = hum
 
             status = "⚠️ Out of Range" if temp > TEMP_MAX or hum > HUMIDITY_MAX else "Within Range"
+
             data[zone] = {"temperature": temp, "humidity": hum, "timestamp": now, "status": status}
 
         try:
