@@ -3,7 +3,7 @@ import time
 import random
 import datetime
 import threading
-from zoneinfo import ZoneInfo  # built-in in Python 3.9+
+import pytz   # ✅ use pytz for timezone handling
 
 import firebase_admin
 from firebase_admin import credentials, db
@@ -37,9 +37,12 @@ zone_values = {
 def push_data_loop():
     print("🚀 Simulator started. Pushing data to Firebase...")
 
+    # ✅ Define IST timezone
+    IST = pytz.timezone("Asia/Kolkata")
+
     while True:
-        # ✅ Use local timezone (Asia/Kolkata)
-        now = datetime.datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M:%S")
+        # ✅ Get current time in IST
+        now = datetime.datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S")
         data = {}
 
         for zone, values in zone_values.items():
@@ -62,7 +65,7 @@ def push_data_loop():
             data[zone] = {
                 "temperature": temp,
                 "humidity": hum,
-                "timestamp": now,   # ✅ Local time
+                "timestamp": now,   # ✅ Local IST time
                 "status": status
             }
 
@@ -94,6 +97,7 @@ if __name__ == "__main__":
     # Run Flask app (so Render keeps service alive)
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
 """import os
 import time
