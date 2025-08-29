@@ -1,23 +1,29 @@
+import os
 import random
 import time
-import json
-import os
 from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials, db
 
-# -----------------------------
-# Firebase setup (ENV variable)
-# -----------------------------
-firebase_key = os.environ.get("FIREBASE_KEY")  # Environment variable from Render
-if not firebase_key:
-    raise Exception("❌ FIREBASE_KEY environment variable not set")
+# Load service account from environment variables
+service_account = {
+    "type": os.getenv("TYPE"),
+    "project_id": os.getenv("PROJECT_ID"),
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),  # convert \n into real newlines
+    "client_email": os.getenv("CLIENT_EMAIL"),
+    "client_id": os.getenv("CLIENT_ID"),
+    "auth_uri": os.getenv("AUTH_URI"),
+    "token_uri": os.getenv("TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
+    "universe_domain": os.getenv("UNIVERSE_DOMAIN")
+}
 
-cred_dict = json.loads(firebase_key)
-cred = credentials.Certificate(cred_dict)
-
+# Initialize Firebase
+cred = credentials.Certificate(service_account)
 firebase_admin.initialize_app(cred, {
-    "databaseURL": "https://cold-storage-iot-default-rtdb.firebaseio.com"
+    "databaseURL": os.getenv("DATABASE_URL")
 })
 
 zones_ref = db.reference("zones")
@@ -26,7 +32,6 @@ zones_ref = db.reference("zones")
 TEMP_MAX = 10
 HUMIDITY_MAX = 80
 
-# Initialize previous values for smoother random changes
 zone_values = {
     f"zone{i}": {"temperature": random.uniform(5, 10), "humidity": random.uniform(60, 80)}
     for i in range(1, 5)
@@ -37,22 +42,17 @@ while True:
     data = {}
 
     for zone, values in zone_values.items():
-        # Smooth random variation (smaller to look realistic)
-        temp = round(values["temperature"] + random.uniform(-0.3, 0.3), 2)
-        hum = round(values["humidity"] + random.uniform(-0.5, 0.5), 2)
+        temp = round(values["temperature"] + random.uniform(-1, 1), 2)
+        hum = round(values["humidity"] + random.uniform(-1, 1), 2)
 
-        # Keep within reasonable bounds
         temp = max(0, min(15, temp))
         hum = max(50, min(90, hum))
 
-        # Update zone values
         zone_values[zone]["temperature"] = temp
         zone_values[zone]["humidity"] = hum
 
-        # Determine status
         status = "⚠️ Out of Range" if temp > TEMP_MAX or hum > HUMIDITY_MAX else "Within Range"
 
-        # Build data dict
         data[zone] = {
             "temperature": temp,
             "humidity": hum,
@@ -60,8 +60,7 @@ while True:
             "status": status
         }
 
-    # Push to Firebase
     zones_ref.set(data)
     print(f"Pushed at {now}:", data)
 
-    time.sleep(10)  # every 10s
+    time.sleep(5)
