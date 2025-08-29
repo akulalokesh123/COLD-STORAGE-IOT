@@ -24,7 +24,7 @@ firebase_admin.initialize_app(firebase_cred, {"databaseURL": os.getenv("FIREBASE
 
 zones_ref = db.reference("zones")
 
-ref.set({"test": "success"})
+zones_ref.set({"test": "success"})
 print("Firebase push worked!")
 # --- Thresholds ---
 TEMP_MAX = 10
