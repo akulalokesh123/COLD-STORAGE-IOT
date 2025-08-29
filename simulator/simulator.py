@@ -4,7 +4,10 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Initialize Firebase
-service_account_info = json.loads(os.getenv("SERVICE_ACCOUNT_JSON"))
+service_account_json_str = os.getenv("SERVICE_ACCOUNT_JSON")
+service_account_info = json.loads(service_account_json_str)
+service_account_info["private_key"] = service_account_info["private_key"].replace("\\n", "\n")
+
 cred = credentials.Certificate(service_account_info)
 firebase_admin.initialize_app(cred, {
     "databaseURL": os.getenv("DATABASE_URL")
