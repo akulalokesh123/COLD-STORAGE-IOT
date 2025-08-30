@@ -1,7 +1,7 @@
 /* ----------------------
    General Styles
 ---------------------- */
-body {
+/*body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #f5f7fa;
   margin: 0;
@@ -16,9 +16,6 @@ header h1 {
   color: #2c3e50;
 }
 
-/* ----------------------
-   KPI Section
----------------------- */
 #kpis {
   display: flex;
   justify-content: center;
@@ -53,9 +50,7 @@ header h1 {
   color: #1a73e8;
 }
 
-/* ----------------------
-   Zone Cards
----------------------- */
+
 #zones-container {
   display: flex;
   flex-wrap: wrap;
@@ -96,9 +91,7 @@ header h1 {
   color: red;
 }
 
-/* ----------------------
-   Charts Section
----------------------- */
+
 #charts {
   display: flex;
   flex-direction: column;
@@ -126,9 +119,6 @@ header h1 {
   height: 280px;
 }
 
-/* ----------------------
-   Logs Section
----------------------- */
 #logs {
   margin-top: 30px;
 }
@@ -158,9 +148,7 @@ header h1 {
   font-weight: bold;
 }
 
-/* ----------------------
-   Responsive Adjustments
----------------------- */
+
 @media (max-width: 800px) {
   #kpis {
     flex-direction: column;
@@ -169,5 +157,292 @@ header h1 {
 
   #charts canvas {
     height: 220px;
+  }
+}
+/*
+/* ----------------------
+   Global Styles
+---------------------- */
+/* ----------------------
+   Global Styles
+---------------------- */
+/* ----------------------
+   Global Styles
+---------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --blue: #2563eb;
+  --green: #16a34a;
+  --orange: #f59e0b;
+  --red: #dc2626;
+  --gray-dark: #1e293b;
+  --gray-light: #64748b;
+  --bg: #f3f4f6;
+  --card-radius: 18px;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.4) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.4) 1px, transparent 1px),
+    linear-gradient(135deg, #e6f2ff, #dbeafe); /* soft dotted pattern + blue gradient */
+  background-size: 40px 40px, 60px 60px, auto;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 24px;
+  color: var(--gray-dark);
+}
+
+header h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ----------------------
+   KPI Section
+---------------------- */
+#kpis {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 45px;
+  flex-wrap: wrap;
+}
+
+.kpi-card {
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  padding: 26px 20px;
+  width: 210px;
+  text-align: center;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.kpi-card:nth-child(1) {
+  background: linear-gradient(135deg, #ef4444, #f87171); /* red */
+}
+.kpi-card:nth-child(2) {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa); /* blue */
+}
+.kpi-card:nth-child(3) {
+  background: linear-gradient(135deg, #10b981, #34d399); /* green */
+}
+.kpi-card:nth-child(4) {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24); /* orange */
+}
+
+.kpi-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.kpi-card h3 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.kpi-card p {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* ----------------------
+   Zone Cards
+---------------------- */
+#zones-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 45px;
+}
+
+.zone-card {
+  background: #fff;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  width: 250px;
+  padding: 22px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border-top: 5px solid var(--blue);
+}
+
+.zone-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.zone-card h2 {
+  margin-bottom: 14px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gray-dark);
+}
+
+.temperature, .humidity, .timestamp, .alert {
+  margin: 8px 0;
+  font-size: 0.95rem;
+  color: var(--gray-light);
+}
+
+.alert {
+  font-weight: 600;
+  color: var(--green);
+}
+
+.alert.out-of-range {
+  color: var(--red);
+  border-bottom: 2px dashed var(--red);
+}
+
+/* ----------------------
+   Charts Section
+---------------------- */
+#charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding: 20px 0;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h2 {
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--gray-dark);
+  border-bottom: 2px solid var(--blue);
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9; /* keeps proportions */
+}
+
+/* ----------------------
+   Logs Section
+---------------------- */
+#logs {
+  margin-top: 45px;
+}
+
+#logs h2 {
+  margin-bottom: 18px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--gray-dark);
+}
+
+#logs table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+#logs th, #logs td {
+  border: 1px solid #e5e7eb;
+  padding: 14px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+#logs th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  color: var(--gray-dark);
+  position: sticky;
+  top: 0;
+}
+
+#logs tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+#logs tr:hover {
+  background-color: #eff6ff;
+}
+
+#logs tr.out-of-range {
+  background-color: #fee2e2;
+  font-weight: 600;
+}
+
+/* ----------------------
+   Responsive Adjustments
+---------------------- */
+@media (max-width: 850px) {
+  #kpis {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: thin;
+  }
+
+  .kpi-card {
+    min-width: 180px;
+  }
+
+  #zones-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* stack charts on mobile */
+  #charts {
+    grid-template-columns: 1fr;
+  }
+
+  #charts canvas {
+    aspect-ratio: 4 / 3; /* taller ratio for small screens */
+  }
+
+  /* logs turn into cards */
+  #logs table, #logs thead, #logs tbody, #logs th, #logs td, #logs tr {
+    display: block;
+  }
+
+  #logs tr {
+    margin-bottom: 14px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  #logs td {
+    border: none;
+    text-align: left;
+    padding: 8px 12px;
+  }
+
+  #logs th {
+    display: none;
   }
 }
