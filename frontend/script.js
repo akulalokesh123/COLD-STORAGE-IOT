@@ -6,6 +6,12 @@ import { db } from "./firbase-config.js";
 // -------------------------
 // Thresholds
 // -------------------------
+const toggle = document.getElementById("themeToggle");
+
+toggle.addEventListener("change", () => {
+  document.body.classList.toggle("dark", toggle.checked);
+});
+
 const TEMP_MIN = 0;
 const TEMP_MAX = 10;
 const HUMIDITY_MAX = 80;
