@@ -30,7 +30,7 @@ HUMIDITY_MAX = 80
 
 # Initialize previous values for smoother random changes
 zone_values = {
-    f"zone{i}": {"temperature": random.uniform(5, 10), "humidity": random.uniform(60, 80)}
+    f"zone{i}": {"temperature": random.uniform(5, 11), "humidity": random.uniform(60, 85)}
     for i in range(1, 5)
 }
 
