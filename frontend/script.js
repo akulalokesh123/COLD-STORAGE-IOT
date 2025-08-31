@@ -1,13 +1,15 @@
 import { ref, onValue, get, query, limitToLast } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 import { db } from "./firbase-config.js";
 
+// -------------------------
+// Theme toggle
+// -------------------------
 const toggle = document.getElementById("themeToggle");
 toggle.addEventListener("change", () => {
   document.body.classList.toggle("dark", toggle.checked);
   localStorage.setItem("theme", toggle.checked ? "dark" : "light");
 });
 
-// Apply saved theme on load
 if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark");
   toggle.checked = true;
@@ -33,13 +35,21 @@ let latestValues = { 1: null, 2: null, 3: null, 4: null };
 const tempChart = new Chart(document.getElementById("tempChart").getContext("2d"), {
   type: "line",
   data: { labels: [], datasets: [] },
-  options: { responsive: true, plugins: { legend: { display: true } }, animation: { duration: 1000 } }
+  options: { 
+    responsive: true, 
+    plugins: { legend: { display: true } }, 
+    animation: { duration: 1000 } 
+  }
 });
 
 const humChart = new Chart(document.getElementById("humChart").getContext("2d"), {
   type: "line",
   data: { labels: [], datasets: [] },
-  options: { responsive: true, plugins: { legend: { display: true } }, animation: { duration: 1000 } }
+  options: { 
+    responsive: true, 
+    plugins: { legend: { display: true } }, 
+    animation: { duration: 1000 } 
+  }
 });
 
 // -------------------------
@@ -96,10 +106,7 @@ function updateLogs(zoneId, val) {
   if (tbody.childElementCount > 20) tbody.removeChild(tbody.lastChild);
 }
 
-// -------------------------
-// Update Charts every 5 seconds
-// -------------------------
-setInterval(() => {
+function updateCharts() {
   const labels = [];
   const tempDatasets = [];
   const humDatasets = [];
@@ -108,9 +115,6 @@ setInterval(() => {
   for (let i = 1; i <= 4; i++) {
     const val = latestValues[i];
     if (!val) continue;
-
-    recentData[i].push(val);
-    if (recentData[i].length > 5) recentData[i].shift();
 
     const timestamps = recentData[i].map(d => d.timestamp);
     const tempData = recentData[i].map(d => d.temperature);
@@ -132,41 +136,83 @@ setInterval(() => {
   humChart.data.labels = labels;
   humChart.data.datasets = humDatasets;
   humChart.update();
-}, 5000);
+}
 
 // -------------------------
-// Firebase listeners
+// Global update function (Zones + KPIs + Logs + Charts)
 // -------------------------
-for (let i = 1; i <= 4; i++) {
-  const zoneRef = ref(db, `zones/zone${i}`);
-  onValue(zoneRef, snapshot => {
-    const val = snapshot.val();
-    if (!val) return;
+function updateAllUI() {
+  for (let i = 1; i <= 4; i++) {
+    const val = latestValues[i];
+    if (!val) continue;
 
-    const outOfRange = val.temperature < TEMP_MIN || val.temperature > TEMP_MAX || val.humidity > HUMIDITY_MAX;
-    if (outOfRange) consecutiveAlerts[i]++; else consecutiveAlerts[i] = 0;
-
-    let status = "Within Range";
-    if (consecutiveAlerts[i] >= 3) { status = "⚠️ Alert"; alertCountPerZone[i]++; }
-    val.status = status;
-
-    totalReadingsPerZone[i]++;
-    latestValues[i] = val;  // store for throttled chart updates
-
+    // Zone card
     const zoneEl = document.getElementById(`zone${i}`);
     zoneEl.innerHTML = `
       <h2>Zone ${i}</h2>
       <p class="temperature">Temperature: ${val.temperature.toFixed(2)} °C</p>
       <p class="humidity">Humidity: ${val.humidity.toFixed(2)} %</p>
       <p class="timestamp">${val.timestamp}</p>
-      <p class="alert ${status === "⚠️ Alert" ? "out-of-range" : ""}">Status: ${status}</p>
+      <p class="alert ${val.status === "⚠️ Alert" ? "out-of-range" : ""}">Status: ${val.status}</p>
     `;
 
-    updateZoneCompliance();
-    updateKPIs();
+    // Chart history
+    recentData[i].push(val);
+    if (recentData[i].length > 5) recentData[i].shift();
+
+    // Logs
     updateLogs(i, val);
-  });
+  }
+
+  updateZoneCompliance();
+  updateKPIs();
+  updateCharts();
 }
+
+// -------------------------
+// Firebase listener
+// -------------------------
+const zonesRef = ref(db, "zones");
+onValue(zonesRef, snapshot => {
+  const zones = snapshot.val();
+  if (!zones) return;
+
+  for (let i = 1; i <= 4; i++) {
+    const val = zones[`zone${i}`];
+    if (!val) continue;
+
+    // ✅ Fixed 3-consecutive-alert logic
+    const outOfRange = val.temperature < TEMP_MIN || val.temperature > TEMP_MAX || val.humidity > HUMIDITY_MAX;
+
+    if (outOfRange) {
+      consecutiveAlerts[i]++;
+    } else {
+      consecutiveAlerts[i] = 0;
+    }
+
+    let status = "Within Range";
+    if (consecutiveAlerts[i] === 3) {
+      status = "⚠️ Alert";
+      alertCountPerZone[i]++;
+    } else if (consecutiveAlerts[i] > 3) {
+      status = "⚠️ Alert"; // keep showing alert, but don’t increment count again
+    }
+
+    val.status = status;
+
+    totalReadingsPerZone[i]++;
+    latestValues[i] = val;
+  }
+
+  // ✅ First update immediately (no 5s blank)
+  if (!window._uiInitialized) {
+    updateAllUI();
+    window._uiInitialized = true;
+  }
+});
+
+// ✅ Then keep updating every 5s
+setInterval(updateAllUI, 5000);
 
 // -------------------------
 // Download Logs CSV
@@ -198,4 +244,4 @@ window.downloadLogs = async function() {
   }
 };
 
-console.log("Dashboard script.js loaded successfully with smooth 5-second chart updates!");
+console.log("✅ Dashboard script.js loaded: instant UI + synced 5s updates with smooth chart transitions");
