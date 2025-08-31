@@ -542,3 +542,29 @@ body.dark .alert.out-of-range {
   color: #f87171;
   border-bottom: 2px dashed #f87171;
 }
+
+/* Download Logs Button */
+button#downloadLogs {
+  background-color: #4CAF50;      /* Green background */
+  color: white;                   /* White text */
+  border: none;                   /* Remove default border */
+  padding: 10px 20px;             /* Add padding */
+  font-size: 16px;                /* Text size */
+  font-weight: bold;
+  border-radius: 8px;             /* Rounded corners */
+  cursor: pointer;                /* Pointer on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth hover effects */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Hover effect */
+button#downloadLogs:hover {
+  background-color: #45a049;      /* Slightly darker green */
+  transform: translateY(-2px);    /* Slight lift on hover */
+}
+
+/* Active / click effect */
+button#downloadLogs:active {
+  background-color: #3e8e41;
+  transform: translateY(0);       /* Pressed down */
+}
