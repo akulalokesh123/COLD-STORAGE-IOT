@@ -223,38 +223,4 @@ for (let i = 1; i <= 4; i++) {
   });
 }
 
-
 console.log("Dashboard script.js loaded successfully with 3-consecutive-alert logic!");
-
-import { get, query, limitToLast } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
-
-window.downloadLogs = async function() {
-  try {
-    const logsRef = ref(db, "logs"); // assuming your backend writes logs here
-    const snapshot = await get(query(logsRef, limitToLast(500))); // last 500 logs
-    if (!snapshot.exists()) {
-      alert("No logs found!");
-      return;
-    }
-
-    const logs = snapshot.val();
-    let csv = "timestamp,zone,temperature,humidity,status\n";
-
-    Object.entries(logs).forEach(([time, zones]) => {
-      Object.entries(zones).forEach(([zone, data]) => {
-        csv += `${time},${zone},${data.temperature},${data.humidity},${data.status}\n`;
-      });
-    });
-
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "logs.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  } catch (err) {
-    console.error(err);
-    alert("Failed to download logs");
-  }
-};

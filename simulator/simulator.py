@@ -3,13 +3,11 @@ import time
 import random
 import datetime
 import threading
-import pytz
-import io
-import csv
+import pytz   # ✅ use pytz for timezone handling
 
-from flask import Flask, Response
 import firebase_admin
 from firebase_admin import credentials, db
+from flask import Flask
 
 # -----------------------------
 # Firebase setup
@@ -20,7 +18,6 @@ firebase_admin.initialize_app(cred, {
 })
 
 zones_ref = db.reference("zones")
-logs_ref = db.reference("logs")   # ✅ logs location in your screenshot
 
 # -----------------------------
 # Thresholds
@@ -40,11 +37,13 @@ zone_values = {
 def push_data_loop():
     print("🚀 Simulator started. Pushing data to Firebase...")
 
+    # ✅ Define IST timezone
     IST = pytz.timezone("Asia/Kolkata")
 
     while True:
+        # ✅ Get current time in IST
         now = datetime.datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S")
-        zones_data = {}
+        data = {}
 
         for zone, values in zone_values.items():
             # Smooth random variation
@@ -62,62 +61,31 @@ def push_data_loop():
             # Determine status
             status = "⚠ Out of Range" if temp > TEMP_MAX or hum > HUMIDITY_MAX else "Within Range"
 
-            # Build zone dict
-            zones_data[zone] = {
+            # Build data dict
+            data[zone] = {
                 "temperature": temp,
                 "humidity": hum,
-                "timestamp": now,
+                "timestamp": now,   # ✅ Local IST time
                 "status": status
             }
 
+        # Push to Firebase
         try:
-            # ✅ Store under timestamp key (like your Firebase screenshot)
-            logs_ref.child(now).set(zones_data)
-            print(f"✅ Pushed at {now}:", zones_data)
+            zones_ref.set(data)
+            print(f"✅ Pushed at {now}:", data)
         except Exception as e:
             print(f"❌ Failed to push data: {e}")
 
         time.sleep(5)
 
 # -----------------------------
-# Flask Web Server
+# Flask web server
 # -----------------------------
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "✅ Simulator is running and sending zone data to Firebase!"
-
-@app.route("/download-logs")
-def download_logs():
-    try:
-        # ✅ Fetch last 500 timestamp entries
-        all_logs = logs_ref.order_by_key().limit_to_last(500).get()
-
-        if not all_logs:
-            return "⚠ No logs found", 404
-
-        output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerow(["timestamp_key", "zone", "temperature", "humidity", "status", "timestamp"])
-
-        for timestamp_key, zones in all_logs.items():
-            for zone, values in zones.items():
-                writer.writerow([
-                    timestamp_key,
-                    zone,
-                    values.get("temperature"),
-                    values.get("humidity"),
-                    values.get("status"),
-                    values.get("timestamp"),
-                ])
-
-        response = Response(output.getvalue(), mimetype="text/csv")
-        response.headers["Content-Disposition"] = "attachment; filename=logs.csv"
-        return response
-
-    except Exception as e:
-        return f"❌ Error fetching logs: {str(e)}", 500
+    return "Simulator is running and sending zone data to Firebase!"
 
 # -----------------------------
 # Entry Point
@@ -126,7 +94,7 @@ if __name__ == "__main__":
     # Start simulator in background
     threading.Thread(target=push_data_loop, daemon=True).start()
 
-    # Run Flask app (Render needs this to stay alive)
+    # Run Flask app (so Render keeps service alive)
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
 
