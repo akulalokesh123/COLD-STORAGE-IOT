@@ -51,8 +51,8 @@ def push_data_loop():
             hum = round(values["humidity"] + random.uniform(-1, 1), 2)
 
             # Keep within reasonable bounds
-            temp = max(0, min(15, temp))
-            hum = max(50, min(90, hum))
+            temp = max(0, min(11, temp))
+            hum = max(50, min(85, hum))
 
             # Update previous values
             zone_values[zone]["temperature"] = temp

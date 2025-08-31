@@ -169,7 +169,6 @@ header h1 {
 /* ----------------------
    Global Styles
 ---------------------- */
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
@@ -179,7 +178,6 @@ header h1 {
   --red: #dc2626;
   --gray-dark: #1e293b;
   --gray-light: #64748b;
-  --gray-darkest: #0f172a;
   --bg: #f3f4f6;
   --card-radius: 18px;
   --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
@@ -198,15 +196,13 @@ body {
   color: var(--gray-dark);
 }
 
-/* ----------------------
-   Header
----------------------- */
 header {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   gap: 30px;  
+  
 }
 
 header h1 {
@@ -230,7 +226,9 @@ header h1 {
   height: 30px;
 }
 
-.theme-switch input { display: none; }
+.theme-switch input {
+  display: none;
+}
 
 .slider {
   position: absolute;
@@ -270,8 +268,6 @@ input:checked + .slider:before {
   gap: 24px;
   margin-bottom: 45px;
   flex-wrap: wrap;
-  overflow-x: auto;
-  padding-bottom: 10px;
 }
 
 .kpi-card {
@@ -282,13 +278,20 @@ input:checked + .slider:before {
   text-align: center;
   color: #fff;
   transition: all 0.3s ease;
-  flex-shrink: 0;
 }
 
-.kpi-card:nth-child(1) { background: linear-gradient(135deg, #ef4444, #f87171); }
-.kpi-card:nth-child(2) { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
-.kpi-card:nth-child(3) { background: linear-gradient(135deg, #10b981, #34d399); }
-.kpi-card:nth-child(4) { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.kpi-card:nth-child(1) {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+}
+.kpi-card:nth-child(2) {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+.kpi-card:nth-child(3) {
+  background: linear-gradient(135deg, #10b981, #34d399);
+}
+.kpi-card:nth-child(4) {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
 
 .kpi-card:hover {
   transform: translateY(-6px) scale(1.03);
@@ -341,17 +344,9 @@ input:checked + .slider:before {
   color: var(--gray-dark);
 }
 
-.zone-card .temperature, 
-.zone-card .humidity, 
-.zone-card .timestamp, 
-.zone-card .alert {
+.temperature, .humidity, .timestamp, .alert {
   margin: 8px 0;
   font-size: 0.95rem;
-  color: var(--gray-light);
-}
-
-.zone-card .timestamp {
-  font-size: 0.85rem;
   color: var(--gray-light);
 }
 
@@ -429,7 +424,6 @@ input:checked + .slider:before {
   padding: 14px;
   text-align: center;
   font-size: 0.95rem;
-  color: inherit;
 }
 
 #logs th {
@@ -465,22 +459,16 @@ input:checked + .slider:before {
   }
 
   .kpi-card {
-    min-width: 160px;
+    min-width: 180px;
   }
 
   #zones-container {
     flex-direction: column;
     align-items: center;
-    width: 100%;
-  }
-
-  .zone-card {
-    width: 90%;
   }
 
   #charts {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
 
   #charts canvas {
@@ -559,24 +547,26 @@ body.dark .alert.out-of-range {
 
 /* Download Logs Button */
 button#downloadLogs {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
+  background-color: #4CAF50;      /* Green background */
+  color: white;                   /* White text */
+  border: none;                   /* Remove default border */
+  padding: 10px 20px;             /* Add padding */
+  font-size: 16px;                /* Text size */
   font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  border-radius: 8px;             /* Rounded corners */
+  cursor: pointer;                /* Pointer on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth hover effects */
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* Hover effect */
 button#downloadLogs:hover {
-  background-color: #45a049;
-  transform: translateY(-2px);
+  background-color: #45a049;      /* Slightly darker green */
+  transform: translateY(-2px);    /* Slight lift on hover */
 }
 
+/* Active / click effect */
 button#downloadLogs:active {
   background-color: #3e8e41;
-  transform: translateY(0);
+  transform: translateY(0);       /* Pressed down */
 }
