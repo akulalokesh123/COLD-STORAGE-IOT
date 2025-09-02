@@ -16,9 +16,14 @@ if (localStorage.getItem("theme") === "dark") {
 }
 
 // -------------------------
-// Thresholds
+// Thresholds per zone
 // -------------------------
-const TEMP_MIN = 0, TEMP_MAX = 10, HUMIDITY_MAX = 80;
+const THRESHOLDS = {
+  1: { TEMP_MIN: 0,  TEMP_MAX: 10, HUMIDITY_MAX: 80 },
+  2: { TEMP_MIN: 5,  TEMP_MAX: 15, HUMIDITY_MAX: 70 },
+  3: { TEMP_MIN: -2, TEMP_MAX: 8,  HUMIDITY_MAX: 85 },
+  4: { TEMP_MIN: 2,  TEMP_MAX: 12, HUMIDITY_MAX: 75 }
+};
 
 // -------------------------
 // Data Storage
@@ -122,6 +127,7 @@ function updateCharts() {
 
     if (labels.length < timestamps.length) labels.splice(0, labels.length, ...timestamps);
 
+    const { TEMP_MIN, TEMP_MAX, HUMIDITY_MAX } = THRESHOLDS[i];
     const alert = val.temperature > TEMP_MAX || val.temperature < TEMP_MIN || val.humidity > HUMIDITY_MAX;
     const color = alert ? "red" : zoneColors[i];
 
@@ -181,7 +187,7 @@ onValue(zonesRef, snapshot => {
     const val = zones[`zone${i}`];
     if (!val) continue;
 
-    // ✅ Fixed 3-consecutive-alert logic
+    const { TEMP_MIN, TEMP_MAX, HUMIDITY_MAX } = THRESHOLDS[i];
     const outOfRange = val.temperature < TEMP_MIN || val.temperature > TEMP_MAX || val.humidity > HUMIDITY_MAX;
 
     if (outOfRange) {
@@ -204,7 +210,6 @@ onValue(zonesRef, snapshot => {
     latestValues[i] = val;
   }
 
-  // ✅ First update immediately (no 5s blank)
   if (!window._uiInitialized) {
     updateAllUI();
     window._uiInitialized = true;
@@ -244,4 +249,4 @@ window.downloadLogs = async function() {
   }
 };
 
-console.log("✅ Dashboard script.js loaded: instant UI + synced 5s updates with smooth chart transitions");
+console.log("✅ Dashboard script.js loaded: per-zone thresholds + instant UI + synced 5s updates with smooth chart transitions");
